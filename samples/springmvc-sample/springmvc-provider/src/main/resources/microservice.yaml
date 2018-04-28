@@ -15,14 +15,24 @@
 ## limitations under the License.
 ## ---------------------------------------------------------------------------
 
-APPLICATION_ID: springmvc-sample
+APPLICATION_ID: springmvc-sample1
 service_description:
-  name: springmvc
+  name: springmvc2
   version: 0.0.2
 cse:
   service:
     registry:
-      address: http://127.0.0.1:30100
+      address: https://cse.cn-north-1.myhwclouds.com:443
+      instance:
+        watch: false
+  config:
+    client:
+      serverUri: https://cse.cn-north-1.myhwclouds.com:443
+      refreshMode: 1
+      refresh_interval: 5000
+  monitor:
+    client:
+      serverUri: https://cse.cn-north-1.myhwclouds.com:443
   rest:
     address: 0.0.0.0:8080
   highway:
@@ -31,3 +41,26 @@ cse:
     chain:
       Provider:
         default: bizkeeper-provider
+#  isolation:
+#    Provider:
+#      enabled: true
+#      timeout: 
+#        enabled: true
+#      timeoutInMilliseconds: 1000
+#  circuitBreaker:
+#    Provider:
+#      enabled: true
+#      requestVolumeThreshold: 2
+#      sleepWindowInMilliseconds: 10000
+#      errorThresholdPercentage: 10
+#  fallback:
+#    Provider:
+#      enabled: true
+#  fallbackpolicy:
+#    Provider:
+#      policy: returnnull
+  credentials:
+    accessKey: EDV0PE1TVESJ0Z9SFMV0
+    secretKey: 82ldOxAc8keg3pbW7pXQbgSRLR5VO4RRBhxhbLKN
+    project: cn-north-1
+    akskCustomCipher: default

@@ -20,17 +20,7 @@ package org.apache.servicecomb.transport.rest.client;
 import com.netflix.config.DynamicPropertyFactory;
 
 public final class TransportClientConfig {
-  private static Class<? extends RestTransportClient> restTransportClientCls = RestTransportClient.class;
-
   private TransportClientConfig() {
-  }
-
-  public static Class<? extends RestTransportClient> getRestTransportClientCls() {
-    return restTransportClientCls;
-  }
-
-  public static void setRestTransportClientCls(Class<? extends RestTransportClient> restTransportClientCls) {
-    TransportClientConfig.restTransportClientCls = restTransportClientCls;
   }
 
   public static int getThreadCount() {
@@ -50,10 +40,8 @@ public final class TransportClientConfig {
   public static boolean getConnectionKeepAlive() {
     return DynamicPropertyFactory.getInstance().getBooleanProperty("cse.rest.client.connection.keepAlive", true).get();
   }
-
+  
   public static boolean getConnectionCompression() {
-    return DynamicPropertyFactory.getInstance()
-        .getBooleanProperty("cse.rest.client.connection.compression", false)
-        .get();
+    return DynamicPropertyFactory.getInstance().getBooleanProperty("cse.rest.client.connection.compression", false).get();
   }
 }

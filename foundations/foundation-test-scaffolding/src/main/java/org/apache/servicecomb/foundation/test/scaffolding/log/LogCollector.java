@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.apache.log4j.Appender;
 import org.apache.log4j.AppenderSkeleton;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggingEvent;
 
@@ -47,11 +46,6 @@ public class LogCollector {
 
   public LogCollector() {
     Logger.getRootLogger().addAppender(appender);
-  }
-
-  public LogCollector setLogLevel(String logName, Level level) {
-    Logger.getLogger(logName).setLevel(level);
-    return this;
   }
 
   public List<LoggingEvent> getEvents() {

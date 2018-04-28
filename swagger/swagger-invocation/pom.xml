@@ -30,6 +30,5 @@
   	<module>invocation-core</module>
   	<module>invocation-jaxrs</module>
   	<module>invocation-springmvc</module>
-  	<module>invocation-validator</module>
   </modules>
 </project>

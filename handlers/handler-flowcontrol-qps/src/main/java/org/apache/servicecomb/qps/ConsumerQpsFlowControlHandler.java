@@ -38,7 +38,8 @@ public class ConsumerQpsFlowControlHandler implements Handler {
       return;
     }
 
-    QpsController qpsController = qpsControllerMgr.getOrCreate(invocation.getMicroserviceName(), invocation);
+    QpsController qpsController = qpsControllerMgr.getOrCreate(
+        invocation.getOperationMeta().getMicroserviceQualifiedName());
     if (qpsController.isLimitNewRequest()) {
       // return http status 429
       CommonExceptionData errorData = new CommonExceptionData("rejected by qps flowcontrol");

@@ -22,9 +22,5 @@ import org.apache.servicecomb.swagger.invocation.SwaggerInvocation;
 public interface ExceptionToResponseConverter<T extends Throwable> {
   Class<T> getExceptionClass();
 
-  default int getOrder() {
-    return 0;
-  }
-
   Response convert(SwaggerInvocation swaggerInvocation, T e);
 }

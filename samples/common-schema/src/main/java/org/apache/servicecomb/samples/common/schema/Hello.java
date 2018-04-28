@@ -21,7 +21,7 @@ import org.apache.servicecomb.samples.common.schema.models.Person;
 
 public interface Hello {
 
-  String sayHi(String name);
+  String sayHi(String name) throws InterruptedException;
 
-  String sayHello(Person person);
+  String sayHello(Person person) throws InterruptedException;
 }

@@ -38,7 +38,7 @@ public class TestClientVerticle {
     AtomicInteger count = new AtomicInteger();
     ClientPoolManager<HttpClientWithContext> clientMgr = new MockUp<ClientPoolManager<HttpClientWithContext>>() {
       @Mock
-      HttpClientWithContext createClientPool(Context context) {
+      HttpClientWithContext createClientPool() {
         count.incrementAndGet();
         return null;
       }

@@ -60,10 +60,9 @@ public class AbstractPart implements Part {
     return submittedFileName;
   }
 
-  public AbstractPart setSubmittedFileName(String submittedFileName) {
+  public void setSubmittedFileName(String submittedFileName) {
     this.submittedFileName = submittedFileName;
     updateContentType();
-    return this;
   }
 
   private void updateContentType() {

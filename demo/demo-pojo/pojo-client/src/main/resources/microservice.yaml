@@ -26,7 +26,7 @@ cse:
   handler:
     chain:
       Consumer:
-        default: qps-flowcontrol-consumer,bizkeeper-consumer,loadbalance
+        default: bizkeeper-consumer,loadbalance
   isolation:
     Consumer:
       enabled: false

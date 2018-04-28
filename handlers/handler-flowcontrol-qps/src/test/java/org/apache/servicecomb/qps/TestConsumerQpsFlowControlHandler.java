@@ -87,9 +87,7 @@ public class TestConsumerQpsFlowControlHandler {
     String key = "svc.schema.opr";
     QpsController qpsController = new QpsController("key", 12);
     Mockito.when(invocation.getOperationMeta()).thenReturn(operationMeta);
-    Mockito.when(operationMeta.getSchemaQualifiedName()).thenReturn("schema.opr");
-    Mockito.when(invocation.getSchemaId()).thenReturn("schema");
-    Mockito.when(invocation.getMicroserviceName()).thenReturn("svc");
+    Mockito.when(operationMeta.getMicroserviceQualifiedName()).thenReturn(key);
     setQpsController(key, qpsController);
     new MockUp<QpsController>() {
       @Mock
@@ -117,12 +115,10 @@ public class TestConsumerQpsFlowControlHandler {
 
   @Test
   public void testHandleIsLimitNewRequestAsFalse() throws Exception {
-    String key = "service.schema.id";
-    QpsController qpsController = new QpsController("service", 12);
-    Mockito.when(invocation.getMicroserviceName()).thenReturn("service");
+    String key = "MicroserviceQualifiedName";
+    QpsController qpsController = new QpsController("key", 12);
     Mockito.when(invocation.getOperationMeta()).thenReturn(operationMeta);
-    
-    Mockito.when(operationMeta.getSchemaQualifiedName()).thenReturn("schema.id");
+    Mockito.when(operationMeta.getMicroserviceQualifiedName()).thenReturn(key);
     setQpsController(key, qpsController);
 
     new MockUp<QpsController>() {

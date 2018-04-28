@@ -27,11 +27,10 @@ public final class RestTransportClientManager {
   // same instance in AbstractTranport. need refactor in future.
   private final Vertx transportVertx = VertxUtils.getOrCreateVertxByName("transport", null);
 
-  private RestTransportClient restClient;
+  private RestTransportClient restClient = new RestTransportClient();
 
   private RestTransportClientManager() {
     try {
-      restClient = TransportClientConfig.getRestTransportClientCls().newInstance();
       restClient.init(transportVertx);
     } catch (Exception e) {
       throw new IllegalStateException("Failed to init RestTransportClient.", e);

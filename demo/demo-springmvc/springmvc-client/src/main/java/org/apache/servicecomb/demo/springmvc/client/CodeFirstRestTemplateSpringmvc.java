@@ -70,12 +70,8 @@ public class CodeFirstRestTemplateSpringmvc extends CodeFirstRestTemplate {
 
   private TestGeneric testGeneric = new TestGeneric();
 
-  private TestDownload testDownload = new TestDownload();
-
   @Override
   protected void testOnlyRest(RestTemplate template, String cseUrlPrefix) {
-    testDownload.runRest();
-
     try {
       testUpload(template, cseUrlPrefix);
     } catch (IOException e) {
@@ -113,7 +109,7 @@ public class CodeFirstRestTemplateSpringmvc extends CodeFirstRestTemplate {
 
   private void testUpload(RestTemplate template, String cseUrlPrefix) throws IOException {
     String file1Content = "hello world";
-    File file1 = File.createTempFile("测 试", ".txt");
+    File file1 = File.createTempFile("upload1", ".txt");
     FileUtils.writeStringToFile(file1, file1Content);
 
     String file2Content = " bonjour";
@@ -183,7 +179,7 @@ public class CodeFirstRestTemplateSpringmvc extends CodeFirstRestTemplate {
       result = template.getForObject(cseUrlPrefix + "/fallback/throwexception/throwexception", String.class);
       TestMgr.check(false, true);
     } catch (Exception e) {
-      TestMgr.check(((CseException) e.getCause()).getMessage(),
+      TestMgr.check(((CseException) e.getCause().getCause().getCause()).getMessage(),
           BizkeeperExceptionUtils.createBizkeeperException(BizkeeperExceptionUtils.CSE_HANDLER_BK_FALLBACK,
               null,
               "springmvc.codeFirst.fallbackThrowException").getMessage());

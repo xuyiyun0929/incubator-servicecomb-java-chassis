@@ -20,11 +20,9 @@ package org.apache.servicecomb.foundation.vertx.http;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import javax.servlet.http.Part;
 import javax.ws.rs.core.Response.StatusType;
 
 import org.apache.servicecomb.foundation.common.http.HttpStatus;
@@ -96,10 +94,5 @@ public class StandardHttpServletResponseEx extends HttpServletResponseWrapper im
   @Override
   public Object getAttribute(String key) {
     return this.attributes.get(key);
-  }
-
-  @Override
-  public CompletableFuture<Void> sendPart(Part body) {
-    throw new Error("not supported method");
   }
 }

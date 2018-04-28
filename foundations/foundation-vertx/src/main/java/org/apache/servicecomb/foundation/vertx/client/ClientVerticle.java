@@ -24,7 +24,6 @@ import io.vertx.core.AbstractVerticle;
 
 public class ClientVerticle<CLIENT_POOL> extends AbstractVerticle {
   private static final Logger LOGGER = LoggerFactory.getLogger(ClientVerticle.class);
-
   public static final String CLIENT_MGR = "clientMgr";
 
   @SuppressWarnings("unchecked")
@@ -32,7 +31,7 @@ public class ClientVerticle<CLIENT_POOL> extends AbstractVerticle {
   public void start() throws Exception {
     try {
       ClientPoolManager<CLIENT_POOL> clientMgr = (ClientPoolManager<CLIENT_POOL>) config().getValue(CLIENT_MGR);
-      clientMgr.createClientPool(context);
+      clientMgr.createClientPool();
     } catch (Throwable e) {
       // vert.x got some states that not print error and execute call back in VertexUtils.blockDeploy, we add a log our self.
       LOGGER.error("", e);

@@ -17,7 +17,12 @@
 
 package org.apache.servicecomb.bizkeeper;
 
+import java.util.HashMap;
+
+import org.apache.servicecomb.bizkeeper.event.FallbackEvent;
 import org.apache.servicecomb.core.Invocation;
+import org.apache.servicecomb.foundation.common.event.EventManager;
+import org.apache.servicecomb.foundation.common.event.AlarmEvent.Type;
 import org.apache.servicecomb.swagger.invocation.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +38,8 @@ import rx.Observable;
  */
 public abstract class BizkeeperCommand extends HystrixObservableCommand<Response> {
   private static final Logger LOG = LoggerFactory.getLogger(BizkeeperCommand.class);
+
+  private static HashMap<String, Boolean> fallbackMarker = new HashMap<>();
 
   private final Invocation invocation;
 
@@ -64,12 +71,27 @@ public abstract class BizkeeperCommand extends HystrixObservableCommand<Response
       try {
         f.onNext(FallbackPolicyManager.getFallbackResponse(type, cause, invocation));
         f.onCompleted();
+        eventAlarm();
       } catch (Exception e) {
         LOG.warn("fallback failed due to:" + e.getMessage());
         throw e;
       }
     });
     return observable;
+  }
+
+  private void eventAlarm() {
+    String policy = Configuration.INSTANCE.getFallbackPolicyPolicy(type,
+        invocation.getMicroserviceName(),
+        invocation.getOperationMeta().getMicroserviceQualifiedName());
+    String microserviceQualifiedName = invocation.getMicroserviceQualifiedName();
+    if (fallbackMarker.get(microserviceQualifiedName) == null) {
+      EventManager.post(new FallbackEvent(policy, invocation, Type.OPEN));
+      fallbackMarker.put(microserviceQualifiedName, true);
+    } else {
+      EventManager.post(new FallbackEvent(policy, invocation, Type.CLOSE));
+      fallbackMarker.remove(microserviceQualifiedName);
+    }
   }
 
   @Override

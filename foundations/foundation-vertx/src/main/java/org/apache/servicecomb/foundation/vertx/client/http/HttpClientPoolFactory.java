@@ -20,6 +20,7 @@ package org.apache.servicecomb.foundation.vertx.client.http;
 import org.apache.servicecomb.foundation.vertx.client.ClientPoolFactory;
 
 import io.vertx.core.Context;
+import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpClientOptions;
 
@@ -32,7 +33,8 @@ public class HttpClientPoolFactory implements ClientPoolFactory<HttpClientWithCo
   }
 
   @Override
-  public HttpClientWithContext createClientPool(Context context) {
+  public HttpClientWithContext createClientPool() {
+    Context context = Vertx.currentContext();
     HttpClient httpClient = context.owner().createHttpClient(httpClientOptions);
 
     return new HttpClientWithContext(httpClient, context);

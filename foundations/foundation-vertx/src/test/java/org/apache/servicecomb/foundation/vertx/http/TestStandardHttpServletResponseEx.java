@@ -23,12 +23,9 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import io.vertx.core.buffer.Buffer;
 import mockit.Mock;
@@ -40,14 +37,6 @@ public class TestStandardHttpServletResponseEx {
   HttpServletResponse response;
 
   StandardHttpServletResponseEx responseEx;
-
-  @Rule
-  public ExpectedException expectedException = ExpectedException.none();
-
-  private void setExceptionExpected() {
-    expectedException.expect(Error.class);
-    expectedException.expectMessage(Matchers.is("not supported method"));
-  }
 
   @Before
   public void setup() {
@@ -124,18 +113,5 @@ public class TestStandardHttpServletResponseEx {
     responseEx.setBodyBuffer(body);
     responseEx.flushBuffer();
     Assert.assertEquals("body", buffer.toString());
-  }
-
-  @Test
-  public void attribute() {
-    responseEx.setAttribute("k", "v");
-    Assert.assertEquals("v", responseEx.getAttribute("k"));
-  }
-
-  @Test
-  public void sendPart() {
-    setExceptionExpected();
-
-    responseEx.sendPart(null);
   }
 }

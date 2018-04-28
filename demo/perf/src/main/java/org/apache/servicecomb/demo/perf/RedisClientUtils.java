@@ -40,7 +40,7 @@ public class RedisClientUtils {
         .setHost(PerfConfiguration.redisHost)
         .setPort(PerfConfiguration.redisPort)
         .setAuth(PerfConfiguration.redisPassword);
-    ClientPoolFactory<RedisClient> factory = (ctx) -> {
+    ClientPoolFactory<RedisClient> factory = () -> {
       return RedisClient.create(vertx, redisOptions);
     };
     clientMgr = new ClientPoolManager<>(vertx, factory);

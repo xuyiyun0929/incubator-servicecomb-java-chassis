@@ -17,10 +17,7 @@
 
 package org.apache.servicecomb.foundation.vertx.http;
 
-import java.util.concurrent.CompletableFuture;
-
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 import javax.ws.rs.core.Response.StatusType;
 
 public interface HttpServletResponseEx extends HttpServletResponse, BodyBufferSupport {
@@ -29,6 +26,4 @@ public interface HttpServletResponseEx extends HttpServletResponse, BodyBufferSu
   void setAttribute(String key, Object value);
 
   Object getAttribute(String key);
-
-  CompletableFuture<Void> sendPart(Part body);
 }

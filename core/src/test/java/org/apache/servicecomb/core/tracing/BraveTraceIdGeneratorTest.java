@@ -31,7 +31,7 @@ public class BraveTraceIdGeneratorTest {
 
     String traceId = traceIdGenerator.generateStringId();
     try {
-      Long.parseLong(traceId, 16);
+      Long.valueOf(traceId);
     } catch (NumberFormatException e) {
       fail("wrong traceId format: " + traceId);
     }

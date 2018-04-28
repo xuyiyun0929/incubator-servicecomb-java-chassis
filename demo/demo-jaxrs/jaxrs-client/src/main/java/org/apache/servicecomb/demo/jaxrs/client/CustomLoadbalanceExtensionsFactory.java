@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 
 import com.netflix.client.DefaultLoadBalancerRetryHandler;
 import com.netflix.client.RetryHandler;
-import com.netflix.client.Utils;
 import com.netflix.loadbalancer.IRule;
 import com.netflix.loadbalancer.RoundRobinRule;
 
@@ -34,14 +33,6 @@ public class CustomLoadbalanceExtensionsFactory implements ExtensionsFactory {
   }
 
   class MyCustomHandler extends DefaultLoadBalancerRetryHandler {
-    @Override
-    public boolean isRetriableException(Throwable e, boolean sameServer) {
-      if (retryEnabled) {
-        return Utils.isPresentAsCause(e, getRetriableExceptions());
-      }
-      return false;
-    }
-
     public MyCustomHandler(int retrySameServer, int retryNextServer, boolean retryEnabled) {
       super(retrySameServer, retryNextServer, retryEnabled);
     }

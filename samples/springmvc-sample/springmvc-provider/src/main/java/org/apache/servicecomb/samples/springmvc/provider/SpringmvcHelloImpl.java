@@ -31,15 +31,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RestSchema(schemaId = "springmvcHello")
 @RequestMapping(path = "/springmvchello", produces = MediaType.APPLICATION_JSON)
 public class SpringmvcHelloImpl implements Hello {
+  public int a1 = 0;
+  public int a2 = 0;
   @Override
   @RequestMapping(path = "/sayhi", method = RequestMethod.POST)
-  public String sayHi(@RequestParam(name = "name") String name) {
+  public String sayHi(@RequestParam(name = "name") String name) throws InterruptedException {
+    a1=a1+1;
+    if (a1<3) {
+    Thread.sleep(2000);
+    }
     return "Hello " + name;
   }
 
   @Override
   @RequestMapping(path = "/sayhello", method = RequestMethod.POST)
-  public String sayHello(@RequestBody Person person) {
+  public String sayHello(@RequestBody Person person) throws InterruptedException {
+//    a2=a2+1;
+    if (a2<3) {
+    Thread.sleep(2000);
+    }
     return "Hello person " + person.getName();
   }
 }

@@ -56,36 +56,28 @@ public class ClientPoolManager<CLIENT_POOL> {
     this.factory = factory;
   }
 
-  public CLIENT_POOL createClientPool(Context context) {
-    CLIENT_POOL pool = factory.createClientPool(context);
-    addPool(context, pool);
+  public CLIENT_POOL createClientPool() {
+    CLIENT_POOL pool = factory.createClientPool();
+    addPool(pool);
     return pool;
   }
 
-  protected void addPool(Context context, CLIENT_POOL pool) {
-    context.put(id, pool);
+  protected void addPool(CLIENT_POOL pool) {
+    Vertx.currentContext().put(id, pool);
     pools.add(pool);
   }
 
   public CLIENT_POOL findClientPool(boolean sync) {
-    return findClientPool(sync, null);
-  }
-
-  public CLIENT_POOL findClientPool(boolean sync, Context targetContext) {
     if (sync) {
       return findThreadBindClientPool();
     }
 
     // reactive mode
-    return findByContext(targetContext);
+    return findByContext();
   }
 
   protected CLIENT_POOL findByContext() {
-    return findByContext(null);
-  }
-
-  protected CLIENT_POOL findByContext(Context targetContext) {
-    Context currentContext = targetContext != null ? targetContext : Vertx.currentContext();
+    Context currentContext = Vertx.currentContext();
     if (currentContext != null
         && currentContext.owner() == vertx
         && currentContext.isEventLoopContext()) {
@@ -97,7 +89,7 @@ public class ClientPoolManager<CLIENT_POOL> {
 
       // this will make "client.thread-count" bigger than which in microservice.yaml
       // maybe it's better to remove "client.thread-count", just use "rest/highway.thread-count"
-      return createClientPool(currentContext);
+      return createClientPool();
     }
 
     // not in correct context:

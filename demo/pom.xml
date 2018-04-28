@@ -47,6 +47,7 @@
     <module>demo-multiple</module>
     <module>demo-signature</module>
     <module>demo-edge</module>
+    
     <module>perf</module>
   </modules>
 
@@ -221,7 +222,7 @@
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-jar-plugin</artifactId>
               <configuration>
-                <outputDirectory>${demo.run.dir}/${project.artifactId}</outputDirectory>
+                <outputDirectory>${demo.run.dir}/${project.name}</outputDirectory>
                 <archive>
                   <manifest>
                     <addClasspath>true</addClasspath>

@@ -26,6 +26,11 @@
     <artifactId>springmvc-provider</artifactId>
     <dependencies>
         <dependency>
+            <groupId>com.huawei.paas.cse</groupId>
+            <artifactId>cse-solution-service-engine</artifactId>
+            <version>2.3.10</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.servicecomb</groupId>
             <artifactId>handler-bizkeeper</artifactId>
         </dependency>

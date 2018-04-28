@@ -19,7 +19,6 @@ package org.apache.servicecomb.spring.cloud.zuul.tracing;
 
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -30,8 +29,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.servicecomb.tests.tracing.TracingTestBase;
 import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +37,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.netflix.config.DynamicProperty;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = TracedZuulMain.class, webEnvironment = RANDOM_PORT)
 public class SpringCloudZuulTracingTest extends TracingTestBase {
@@ -49,18 +44,8 @@ public class SpringCloudZuulTracingTest extends TracingTestBase {
   @Autowired
   private TestRestTemplate testRestTemplate;
 
-  @BeforeClass
-  public static void beforeClass() {
-    System.setProperty("property.test5", "from_system_property");
-  }
-
-  @AfterClass
-  public static void afterClass() {
-    System.clearProperty("property.test5");
-  }
-
   @After
-  public void tearDown() {
+  public void tearDown() throws Exception {
     appender.clear();
   }
 
@@ -91,27 +76,5 @@ public class SpringCloudZuulTracingTest extends TracingTestBase {
     assertThat(tracingMessages.size(), greaterThanOrEqualTo(2));
 
     assertThatSpansReceivedByZipkin(tracingMessages, "/dummy/rest/oops", "500", "/oops", "590");
-  }
-
-  @Test
-  public void testGetConfigFromSpringBoot() {
-    DynamicProperty dynamicProperty = DynamicProperty.getInstance("property.test0");
-    assertEquals("from_properties", dynamicProperty.getString());
-    dynamicProperty = DynamicProperty.getInstance("property.test1");
-    assertEquals("from_yml", dynamicProperty.getString());
-    dynamicProperty = DynamicProperty.getInstance("property.test2");
-    assertEquals("from_yaml_from_yml", dynamicProperty.getString());
-    dynamicProperty = DynamicProperty.getInstance("property.test3");
-    assertEquals("from_yaml_dev_from_properties", dynamicProperty.getString());
-    dynamicProperty = DynamicProperty.getInstance("property.test4");
-    assertEquals("from_microservice_yaml", dynamicProperty.getString());
-    dynamicProperty = DynamicProperty.getInstance("property.test5");
-    assertEquals("from_system_property", dynamicProperty.getString());
-
-    ResponseEntity<String> responseEntity = testRestTemplate.getForEntity("/dummy/rest/testProperty", String.class);
-
-    assertThat(responseEntity.getStatusCode(), is(OK));
-    assertThat(responseEntity.getBody(),
-        is("from_properties-from_yml-from_yaml_from_yml-from_yaml_dev_from_properties-from_microservice_yaml-from_system_property"));
   }
 }

@@ -73,7 +73,7 @@ public class TestDefaultLogPublisher {
 
   @Test
   public void init_enabled_default() {
-    Holder<Boolean> registered = new Holder<>(false);
+    Holder<Boolean> registered = new Holder<>();
     new MockUp<EventBus>(eventBus) {
       @Mock
       void register(Object object) {
@@ -82,7 +82,7 @@ public class TestDefaultLogPublisher {
     };
 
     publisher.init(globalRegistry, eventBus, new MetricsBootstrapConfig());
-    Assert.assertFalse(registered.value);
+    Assert.assertTrue(registered.value);
   }
 
   @Test
@@ -167,7 +167,7 @@ public class TestDefaultLogPublisher {
       }
     };
 
-    publisher.onPolledEvent(new PolledEvent(Collections.emptyList(), Collections.emptyList()));
+    publisher.onPolledEvent(new PolledEvent(Collections.emptyList()));
 
     List<LoggingEvent> events = collector.getEvents().stream().filter(e -> {
       return DefaultLogPublisher.class.getName().equals(e.getLoggerName());

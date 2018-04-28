@@ -61,12 +61,8 @@ public class DefaultHttpClientFilter implements HttpClientFilter {
     return restOperation.findProduceProcessor(contentTypeForFind);
   }
 
-  protected Object extractResult(Invocation invocation, HttpServletResponseEx responseEx) {
-    Object result = invocation.getHandlerContext().get(RestConst.READ_STREAM_PART);
-    if (result != null) {
-      return result;
-    }
-
+  @Override
+  public Response afterReceiveResponse(Invocation invocation, HttpServletResponseEx responseEx) {
     OperationMeta operationMeta = invocation.getOperationMeta();
     ResponseMeta responseMeta = operationMeta.findResponseMeta(responseEx.getStatus());
     RestOperationMeta swaggerRestOperation = operationMeta.getExtData(RestConst.SWAGGER_REST_OPERATION);
@@ -79,19 +75,16 @@ public class DefaultHttpClientFilter implements HttpClientFilter {
               responseEx.getStatus(),
               responseEx.getStatusType().getReasonPhrase(),
               responseEx.getHeader(HttpHeaders.CONTENT_TYPE));
-      return ExceptionFactory.createConsumerException(new CommonExceptionData(msg));
+      Exception exception = ExceptionFactory.createConsumerException(new CommonExceptionData(msg));
+      return Response.consumerFailResp(exception);
     }
 
+    Object result = null;
     try {
-      return produceProcessor.decodeResponse(responseEx.getBodyBuffer(), responseMeta.getJavaType());
+      result = produceProcessor.decodeResponse(responseEx.getBodyBuffer(), responseMeta.getJavaType());
     } catch (Exception e) {
-      return ExceptionFactory.createConsumerException(e);
+      return Response.consumerFailResp(e);
     }
-  }
-
-  @Override
-  public Response afterReceiveResponse(Invocation invocation, HttpServletResponseEx responseEx) {
-    Object result = extractResult(invocation, responseEx);
 
     Response response =
         Response.create(responseEx.getStatusType(), result);

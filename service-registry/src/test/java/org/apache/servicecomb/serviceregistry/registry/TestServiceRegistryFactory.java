@@ -31,17 +31,13 @@ import org.junit.Test;
 import com.google.common.eventbus.EventBus;
 
 import mockit.Deencapsulation;
-import mockit.Mocked;
 
 /**
  * Created by   on 2017/3/31.
  */
 public class TestServiceRegistryFactory {
   @Test
-  // mock ServiceRegistryClientImpl to avoid send request to remote SC
-  // even there is no any reference to registryClient, DO NOT delete it.
-  // because what changed is class ServiceRegistryClientImpl
-  public void testGetRemoteRegistryClient(@Mocked ServiceRegistryClientImpl registryClient) {
+  public void testGetRemoteRegistryClient() {
     EventBus eventBus = new EventBus();
     ServiceRegistryConfig serviceRegistryConfig = ServiceRegistryConfig.INSTANCE;
     MicroserviceDefinition microserviceDefinition = new MicroserviceDefinition(Collections.emptyList());

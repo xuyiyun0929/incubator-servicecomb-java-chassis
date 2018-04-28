@@ -24,10 +24,8 @@ import java.io.InputStream;
 
 import org.apache.commons.io.FileUtils;
 
-public class FilePart extends AbstractPart implements FilePartForSend {
+public class FilePart extends AbstractPart {
   private File file;
-
-  private boolean deleteAfterFinished;
 
   public FilePart(String name, String file) {
     this(name, new File(file));
@@ -52,25 +50,5 @@ public class FilePart extends AbstractPart implements FilePartForSend {
   @Override
   public void write(String fileName) throws IOException {
     FileUtils.copyFile(file, new File(fileName));
-  }
-
-  @Override
-  public void delete() throws IOException {
-    file.delete();
-  }
-
-  @Override
-  public boolean isDeleteAfterFinished() {
-    return deleteAfterFinished;
-  }
-
-  public FilePart setDeleteAfterFinished(boolean deleteAfterFinished) {
-    this.deleteAfterFinished = deleteAfterFinished;
-    return this;
-  }
-
-  @Override
-  public String getAbsolutePath() {
-    return file.getAbsolutePath();
   }
 }

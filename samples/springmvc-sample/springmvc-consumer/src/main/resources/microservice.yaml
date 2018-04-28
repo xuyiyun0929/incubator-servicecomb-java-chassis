@@ -22,11 +22,50 @@ service_description:
 cse:
   service:
     registry:
-      address: http://127.0.0.1:30100
+      address: https://cse.cn-north-1.myhwclouds.com:443
+      instance:
+        watch: false
+  config:
+    client:
+      serverUri: https://cse.cn-north-1.myhwclouds.com:443
+      refreshMode: 1
+      refresh_interval: 5000
+  monitor:
+    client:
+      serverUri: https://cse.cn-north-1.myhwclouds.com:44
   handler:
     chain:
       Consumer:
         default: bizkeeper-consumer,loadbalance
-  isolation:
-    Consumer:
-      enabled: false
+#  loadbalance:
+#    isolation:
+#      enabled: true
+#      continuousFailureThreshold: 5
+#      enableRequestThreshold: 5
+#    strategy:
+#      name: RoundRobin
+#  isolation:
+#    Consumer:
+#      enabled: true
+#      timeout: 
+#        enabled: true
+#      timeoutInMilliseconds: 1000
+#  circuitBreaker:
+#    Consumer:
+#      forceClosed: true
+#      forceOpen: true
+#      enabled: true
+#      requestVolumeThreshold: 4
+#      sleepWindowInMilliseconds: 10000
+#      errorThresholdPercentage: 10
+#  fallback:
+#    Consumer:
+#      enabled: true
+#  fallbackpolicy:
+#    Consumer:
+#      policy: returnnull
+  credentials:
+    accessKey: EDV0PE1TVESJ0Z9SFMV0
+    secretKey: 82ldOxAc8keg3pbW7pXQbgSRLR5VO4RRBhxhbLKN
+    project: cn-north-1
+    akskCustomCipher: default

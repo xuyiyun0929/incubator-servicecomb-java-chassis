@@ -20,11 +20,9 @@ package org.apache.servicecomb.foundation.vertx.http;
 import java.io.IOException;
 
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
 
 public class TestAbstractHttpServletResponse {
   @Rule
@@ -305,18 +303,5 @@ public class TestAbstractHttpServletResponse {
     setExceptionExpected();
 
     response.getStatusType();
-  }
-
-  @Test
-  public void attribute() {
-    response.setAttribute("k", "v");
-    Assert.assertEquals("v", response.getAttribute("k"));
-  }
-
-  @Test
-  public void sendPart() {
-    setExceptionExpected();
-
-    response.sendPart(null);
   }
 }
