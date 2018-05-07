@@ -45,45 +45,55 @@ public class SpringmvcConsumerMain {
     init();
     Person person = new Person();
     person.setName("ServiceComb/Java Chassis");
-
+    int a = 0;
     // RestTemplate Consumer or POJO Consumer. You can choose whatever you like
     // RestTemplate Consumer
-    String sayHiResult =
-        restTemplate.postForObject("cse://springmvc/springmvchello/sayhi?name=Java Chassis", null, String.class);
-    String sayHelloResult = restTemplate.postForObject("cse://springmvc/springmvchello/sayhello", person, String.class);
-    System.out.println("RestTemplate Consumer or POJO Consumer.  You can choose whatever you like.");
-    System.out.println("RestTemplate consumer sayhi services: " + sayHiResult);
-    System.out.println("RestTemplate consumer sayhello services: " + sayHelloResult);
+    while (true) {
+      try {
+        Thread.sleep(1000);
+        a=a+1;
+        System.out.println("第"+a+"次调用");
+        String sayHiResult =
+            restTemplate.postForObject("cse://springmvc/springmvchello/sayhi?name=Java Chassis", null, String.class);
+        String sayHelloResult =
+            restTemplate.postForObject("cse://springmvc/springmvchello/sayhello", person, String.class);
+        System.out.println("RestTemplate Consumer or POJO Consumer.  You can choose whatever you like.");
+        System.out.println("RestTemplate consumer sayhi services: " + sayHiResult);
+        System.out.println("RestTemplate consumer sayhello services: " + sayHelloResult);
 
-    // POJO Consumer
-    System.out.println("POJO consumer sayhi services: " + hello.sayHi("Java Chassis"));
-    System.out.println("POJO consumer sayhello services: " + hello.sayHello(person));
+        // POJO Consumer
+        System.out.println("POJO consumer sayhi services: " + hello.sayHi("Java Chassis"));
+        System.out.println("POJO consumer sayhello services: " + hello.sayHello(person));
 
-    //AsyncRestTemplate Consumer
-    CseAsyncRestTemplate cseAsyncRestTemplate = new CseAsyncRestTemplate();
-    ListenableFuture<ResponseEntity<String>> responseEntityListenableFuture = cseAsyncRestTemplate
-        .postForEntity("cse://springmvc/springmvchello/sayhi?name=Java Chassis", null, String.class);
-    ResponseEntity<String> responseEntity = responseEntityListenableFuture.get();
-    System.out.println("AsyncRestTemplate Consumer sayHi services: " + responseEntity.getBody());
+        //AsyncRestTemplate Consumer
+        CseAsyncRestTemplate cseAsyncRestTemplate = new CseAsyncRestTemplate();
+        ListenableFuture<ResponseEntity<String>> responseEntityListenableFuture = cseAsyncRestTemplate
+            .postForEntity("cse://springmvc/springmvchello/sayhi?name=Java Chassis", null, String.class);
+        ResponseEntity<String> responseEntity = responseEntityListenableFuture.get();
+        System.out.println("AsyncRestTemplate Consumer sayHi services: " + responseEntity.getBody());
 
-    HttpEntity<Person> entity = new HttpEntity<>(person);
-    ListenableFuture<ResponseEntity<String>> listenableFuture = cseAsyncRestTemplate
-        .exchange("cse://springmvc/springmvchello/sayhello", HttpMethod.POST, entity, String.class);
-//    ResponseEntity<String> responseEntity1 = listenableFuture.get();
-//    System.out.println("AsyncRestTemplate Consumer sayHello services: " + responseEntity1.getBody());
+        HttpEntity<Person> entity = new HttpEntity<>(person);
+        ListenableFuture<ResponseEntity<String>> listenableFuture = cseAsyncRestTemplate
+            .exchange("cse://springmvc/springmvchello/sayhello", HttpMethod.POST, entity, String.class);
+        //    ResponseEntity<String> responseEntity1 = listenableFuture.get();
+        //    System.out.println("AsyncRestTemplate Consumer sayHello services: " + responseEntity1.getBody());
 
-    listenableFuture.addCallback(
-        new ListenableFutureCallback<ResponseEntity<String>>() {
-          @Override
-          public void onFailure(Throwable ex) {
-            LOG.error("AsyncResTemplate Consumer catched exception when sayHello, ",ex);
-          }
-          @Override
-          public void onSuccess(ResponseEntity<String> result) {
-            System.out.println("AsyncRestTemplate Consumer sayHello services: " + result.getBody());
-          }
-        }
-    );
+        listenableFuture.addCallback(
+            new ListenableFutureCallback<ResponseEntity<String>>() {
+              @Override
+              public void onFailure(Throwable ex) {
+                LOG.error("AsyncResTemplate Consumer catched exception when sayHello, ", ex);
+              }
+
+              @Override
+              public void onSuccess(ResponseEntity<String> result) {
+                System.out.println("AsyncRestTemplate Consumer sayHello services: " + result.getBody());
+              }
+            });
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
 
   }
 

@@ -18,8 +18,6 @@ package org.apache.servicecomb.bizkeeper.event;
 
 import java.util.HashMap;
 
-import org.apache.servicecomb.bizkeeper.Configuration;
-import org.apache.servicecomb.core.Invocation;
 import org.apache.servicecomb.foundation.common.event.AlarmEvent;
 
 import com.netflix.hystrix.HystrixCommandKey;
@@ -38,13 +36,11 @@ public class CircutBreakerEvent extends AlarmEvent {
    *   currentErrorCount:当前请求出错计数
    *   currentErrorPercentage:当前请求出错百分比
    */
-  public CircutBreakerEvent(Invocation invocation, HystrixCommandKey commandKey, String groupname, Type type) {
+  public CircutBreakerEvent(HystrixCommandKey commandKey, Type type) {
     super(type, id);
     HystrixCommandMetrics hystrixCommandMetrics =
         HystrixCommandMetrics.getInstance(commandKey);
-    String microserviceName = invocation.getMicroserviceName();
-    String invocationQualifiedName = invocation.getInvocationQualifiedName();
-    msg.put("microserviceName", microserviceName);
+    String invocationQualifiedName = commandKey.name();
     msg.put("invocationQualifiedName", invocationQualifiedName);
     if (hystrixCommandMetrics != null) {
       msg.put("currentTotalRequest", hystrixCommandMetrics.getHealthCounts().getTotalRequests());
@@ -52,16 +48,11 @@ public class CircutBreakerEvent extends AlarmEvent {
       msg.put("currentErrorPercentage", hystrixCommandMetrics.getHealthCounts().getErrorPercentage());
     }
     msg.put("requestVolumeThreshold",
-        Configuration.INSTANCE.getCircuitBreakerRequestVolumeThreshold(groupname,
-            microserviceName,
-            invocationQualifiedName));
+        hystrixCommandMetrics.getProperties().circuitBreakerRequestVolumeThreshold().get());
     msg.put("sleepWindowInMilliseconds",
-        Configuration.INSTANCE.getCircuitBreakerSleepWindowInMilliseconds(groupname,
-            microserviceName,
-            invocationQualifiedName));
+        hystrixCommandMetrics.getProperties().circuitBreakerSleepWindowInMilliseconds().get());
     msg.put("errorThresholdPercentage",
-        Configuration.INSTANCE
-            .getCircuitBreakerErrorThresholdPercentage(groupname, microserviceName, invocationQualifiedName));
+        hystrixCommandMetrics.getProperties().circuitBreakerErrorThresholdPercentage().get());
     super.setMsg(msg);
   }
 }
