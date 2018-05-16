@@ -36,12 +36,9 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.google.common.eventbus.Subscribe;
-import com.netflix.config.ConfigurationManager;
 import com.netflix.config.DynamicPropertyFactory;
 import com.netflix.loadbalancer.LoadBalancerStats;
 import com.netflix.loadbalancer.Server;
-
-import mockit.Deencapsulation;
 
 public class TestIsolationServerListFilter {
 
@@ -53,6 +50,8 @@ public class TestIsolationServerListFilter {
 
   Object receiveEvent = null;
 
+  EventManager eventManager = new EventManager();
+
   @BeforeClass
   public static void initConfig() throws Exception {
     ConfigUtil.installDynamicConfig();
@@ -60,12 +59,10 @@ public class TestIsolationServerListFilter {
 
   @AfterClass
   public static void classTeardown() {
-    Deencapsulation.setField(ConfigurationManager.class, "instance", null);
-    Deencapsulation.setField(ConfigurationManager.class, "customConfigurationInstalled", false);
-    Deencapsulation.setField(DynamicPropertyFactory.class, "config", null);
     ArchaiusUtils.resetConfig();
   }
 
+  @SuppressWarnings("static-access")
   @Before
   public void setUp() throws Exception {
     IsolationServerListFilter = new IsolationServerListFilter();
@@ -82,9 +79,10 @@ public class TestIsolationServerListFilter {
         taskList.add(isolationServerEvent);
       }
     };
-    EventManager.register(receiveEvent);
+    eventManager.register(receiveEvent);
   }
 
+  @SuppressWarnings("static-access")
   @After
   public void tearDown() throws Exception {
     IsolationServerListFilter = null;
@@ -93,6 +91,7 @@ public class TestIsolationServerListFilter {
     AbstractConfiguration configuration =
         (AbstractConfiguration) DynamicPropertyFactory.getBackingConfigurationSource();
     configuration.clearProperty("cse.loadbalance.isolation.continuousFailureThreshold");
+    eventManager.unregister(receiveEvent);
   }
 
   @Test

@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.servicecomb.foundation.common.event.AlarmEvent;
 import org.apache.servicecomb.foundation.common.event.EventManager;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,6 +44,9 @@ public class TestCircutBreakerEventNotifier {
 
   Object receiveEvent = null;
 
+  EventManager eventManager = new EventManager();
+
+  @SuppressWarnings("static-access")
   @Before
   public void setUp() throws Exception {
     taskList = new ArrayList<>();
@@ -54,7 +58,13 @@ public class TestCircutBreakerEventNotifier {
         taskList.add(circutBreakerEvent);
       }
     };
-    EventManager.register(receiveEvent);
+    eventManager.register(receiveEvent);
+  }
+  
+  @SuppressWarnings("static-access")
+  @After
+  private void publi() {
+    eventManager.unregister(receiveEvent);
   }
 
   @Test

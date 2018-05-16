@@ -47,9 +47,7 @@ public class CircutBreakerEvent extends AlarmEvent {
     super(type);
     HystrixCommandMetrics hystrixCommandMetrics =
         HystrixCommandMetrics.getInstance(commandKey);
-    HashMap<String, Object> msg = new HashMap<>();
     this.invocationName = commandKey.name();
-    msg.put("invocationName", invocationName);
     if (hystrixCommandMetrics != null) {
       this.currentTotalRequest = hystrixCommandMetrics.getHealthCounts().getTotalRequests();
       this.currentErrorPercentage = hystrixCommandMetrics.getHealthCounts().getErrorCount();
@@ -59,14 +57,7 @@ public class CircutBreakerEvent extends AlarmEvent {
           hystrixCommandMetrics.getProperties().circuitBreakerSleepWindowInMilliseconds().get();
       this.errorThresholdPercentage =
           hystrixCommandMetrics.getProperties().circuitBreakerErrorThresholdPercentage().get();
-      msg.put("currentTotalRequest", this.currentTotalRequest);
-      msg.put("currentErrorCount", this.currentErrorPercentage);
-      msg.put("currentErrorPercentage", this.currentErrorCount);
-      msg.put("requestVolumeThreshold", this.requestVolumeThreshold);
-      msg.put("sleepWindowInMilliseconds", this.sleepWindowInMilliseconds);
-      msg.put("errorThresholdPercentage", this.errorThresholdPercentage);
     }
-    super.setMsg(msg);
   }
 
   public String getInvocationName() {
