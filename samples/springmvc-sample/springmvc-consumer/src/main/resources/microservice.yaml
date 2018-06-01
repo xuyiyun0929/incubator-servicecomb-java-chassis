@@ -15,7 +15,7 @@
 ## limitations under the License.
 ## ---------------------------------------------------------------------------
 
-APPLICATION_ID: springmvc-sample
+APPLICATION_ID: springmvc-sample2
 service_description:
   name: springmvcConsumer
   version: 0.0.2
@@ -23,8 +23,8 @@ cse:
   service:
     registry:
       address: https://cse.cn-north-1.myhwclouds.com:443
-#      instance:
-#        watch: false
+      instance:
+        watch: false
   config:
     client:
       serverUri: https://cse.cn-north-1.myhwclouds.com:443

@@ -51,8 +51,8 @@ public class CircutBreakerEvent extends AlarmEvent {
     super(type);
     HystrixCommandMetrics hystrixCommandMetrics =
         HystrixCommandMetrics.getInstance(commandKey);
-    HystrixCommandGroupKey a = hystrixCommandMetrics.getCommandGroup();
-    String b = a.name();
+    test a = (test)hystrixCommandMetrics.getCommandGroup();
+    this.microservice = a.getM();
     String[] arrayKey = commandKey.name().split("\\.");
     this.role = arrayKey[0];
     this.microservice = arrayKey[1];

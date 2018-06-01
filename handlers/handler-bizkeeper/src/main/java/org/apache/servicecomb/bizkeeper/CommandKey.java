@@ -32,8 +32,8 @@ public final class CommandKey {
   }
 
   public static HystrixCommandGroupKey toHystrixCommandGroupKey(String type, Invocation invocation) {
-    test t = new test("Consumer");
-    return t.asKey(type);
+
+    return test.asKey(type, invocation.getMicroserviceName());
   }
 
   public static HystrixCommandKey toHystrixCommandKey(String type, Invocation invocation) {
