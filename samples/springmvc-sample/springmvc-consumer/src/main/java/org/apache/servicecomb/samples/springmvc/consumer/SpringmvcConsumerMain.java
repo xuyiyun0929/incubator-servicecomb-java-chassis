@@ -91,7 +91,7 @@ public class SpringmvcConsumerMain {
               }
             });
       } catch (Exception e) {
-        e.printStackTrace();
+//        e.printStackTrace();
       }
     }
 

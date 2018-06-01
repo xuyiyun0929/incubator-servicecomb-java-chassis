@@ -37,19 +37,17 @@ public class SpringmvcHelloImpl implements Hello {
   @RequestMapping(path = "/sayhi", method = RequestMethod.POST)
   public String sayHi(@RequestParam(name = "name") String name) throws InterruptedException {
     a1=a1+1;
-    if (a1>3) {
     Thread.sleep(2000);
-    }
     return "Hello " + name;
   }
 
   @Override
   @RequestMapping(path = "/sayhello", method = RequestMethod.POST)
   public String sayHello(@RequestBody Person person) throws InterruptedException {
-    a2=a2+1;
-    if (a2>3) {
+//    a2=a2+1;
+//    if (a2<3) {
     Thread.sleep(2000);
-    }
+//    }
     return "Hello person " + person.getName();
   }
 }

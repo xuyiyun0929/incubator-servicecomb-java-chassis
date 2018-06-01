@@ -23,8 +23,8 @@ cse:
   service:
     registry:
       address: https://cse.cn-north-1.myhwclouds.com:443
-      instance:
-        watch: false
+#      instance:
+#        watch: false
   config:
     client:
       serverUri: https://cse.cn-north-1.myhwclouds.com:443
@@ -52,11 +52,12 @@ cse:
       timeoutInMilliseconds: 1000
   circuitBreaker:
     Consumer:
+      springmvc:
 #      forceClosed: true
 #      forceOpen: true
-      enabled: true
-      requestVolumeThreshold: 4
-      sleepWindowInMilliseconds: 10000
+        enabled: true
+        requestVolumeThreshold: 4
+        sleepWindowInMilliseconds: 10000
 #      errorThresholdPercentage: 10
   fallback:
     Consumer:
@@ -65,7 +66,7 @@ cse:
 #    Consumer:
 #      policy: returnnull
   credentials:
-    accessKey: EDV0PE1TVESJ0Z9SFMV0
-    secretKey: 82ldOxAc8keg3pbW7pXQbgSRLR5VO4RRBhxhbLKN
+    accessKey: AONYCAOM6ZA0WGN532SE
+    secretKey: CL6FFLnHKona7gvbEzCx7baSDcP3UbePljhg5Pdh
     project: cn-north-1
     akskCustomCipher: default

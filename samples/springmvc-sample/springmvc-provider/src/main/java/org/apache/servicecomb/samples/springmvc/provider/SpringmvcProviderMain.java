@@ -17,12 +17,21 @@
 
 package org.apache.servicecomb.samples.springmvc.provider;
 
+import org.apache.servicecomb.foundation.common.event.EventManager;
 import org.apache.servicecomb.foundation.common.utils.BeanUtils;
 import org.apache.servicecomb.foundation.common.utils.Log4jUtils;
+import org.apache.servicecomb.serviceregistry.task.event.HeartbeatSuccEvent;
+
+import com.google.common.eventbus.Subscribe;
 
 public class SpringmvcProviderMain {
 
   public static void main(String[] args) throws Exception {
+    EventManager.register(new Object() {
+      @Subscribe
+      public void onEvent(HeartbeatSuccEvent task) {
+      }
+    });
     Log4jUtils.init();
     BeanUtils.init();
   }

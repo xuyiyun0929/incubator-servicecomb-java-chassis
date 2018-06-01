@@ -72,6 +72,7 @@ public abstract class BizkeeperHandler implements Handler {
   @Override
   public void handle(Invocation invocation, AsyncResponse asyncResp) {
     HystrixObservable<Response> command = delegate.createBizkeeperCommand(invocation);
+
     Observable<Response> observable = command.toObservable();
     observable.subscribe(asyncResp::complete, error -> {
       LOG.warn("catch error in bizkeeper:" + error.getMessage());

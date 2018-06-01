@@ -16,43 +16,97 @@
  */
 package org.apache.servicecomb.bizkeeper.event;
 
-import java.util.HashMap;
-
 import org.apache.servicecomb.foundation.common.event.AlarmEvent;
 
+import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandKey;
 import com.netflix.hystrix.HystrixCommandMetrics;
 
 public class CircutBreakerEvent extends AlarmEvent {
 
-  private static int id = 1001;
+  private String role;
 
-  private HashMap<String, Object> msg = new HashMap<>();
+  private String microservice;
 
-  /**
-   * msg部分字段说明：
-   *   invocationQualifiedName:当前调用的接口
-   *   currentTotalRequest:当前总请求数
-   *   currentErrorCount:当前请求出错计数
-   *   currentErrorPercentage:当前请求出错百分比
-   */
+  private String schema;
+
+  private String operation;
+
+  //当前总请求数
+  private long currentTotalRequest;
+
+  //当前请求出错计数
+  private long currentErrorCount;
+
+  //当前请求出错百分比
+  private long currentErrorPercentage;
+
+  private int requestVolumeThreshold;
+
+  private int sleepWindowInMilliseconds;
+
+  private int errorThresholdPercentage;
+
   public CircutBreakerEvent(HystrixCommandKey commandKey, Type type) {
-    super(type, id);
+    super(type);
     HystrixCommandMetrics hystrixCommandMetrics =
         HystrixCommandMetrics.getInstance(commandKey);
-    String invocationQualifiedName = commandKey.name();
-    msg.put("invocationQualifiedName", invocationQualifiedName);
+    HystrixCommandGroupKey a = hystrixCommandMetrics.getCommandGroup();
+    String b = a.name();
+    String[] arrayKey = commandKey.name().split("\\.");
+    this.role = arrayKey[0];
+    this.microservice = arrayKey[1];
+    this.schema = arrayKey[2];
+    this.operation = arrayKey[3];
     if (hystrixCommandMetrics != null) {
-      msg.put("currentTotalRequest", hystrixCommandMetrics.getHealthCounts().getTotalRequests());
-      msg.put("currentErrorCount", hystrixCommandMetrics.getHealthCounts().getErrorCount());
-      msg.put("currentErrorPercentage", hystrixCommandMetrics.getHealthCounts().getErrorPercentage());
+      this.currentTotalRequest = hystrixCommandMetrics.getHealthCounts().getTotalRequests();
+      this.currentErrorPercentage = hystrixCommandMetrics.getHealthCounts().getErrorCount();
+      this.currentErrorCount = hystrixCommandMetrics.getHealthCounts().getErrorPercentage();
+      this.requestVolumeThreshold = hystrixCommandMetrics.getProperties().circuitBreakerRequestVolumeThreshold().get();
+      this.sleepWindowInMilliseconds =
+          hystrixCommandMetrics.getProperties().circuitBreakerSleepWindowInMilliseconds().get();
+      this.errorThresholdPercentage =
+          hystrixCommandMetrics.getProperties().circuitBreakerErrorThresholdPercentage().get();
     }
-    msg.put("requestVolumeThreshold",
-        hystrixCommandMetrics.getProperties().circuitBreakerRequestVolumeThreshold().get());
-    msg.put("sleepWindowInMilliseconds",
-        hystrixCommandMetrics.getProperties().circuitBreakerSleepWindowInMilliseconds().get());
-    msg.put("errorThresholdPercentage",
-        hystrixCommandMetrics.getProperties().circuitBreakerErrorThresholdPercentage().get());
-    super.setMsg(msg);
+  }
+
+  public String getRole() {
+    return role;
+  }
+
+  public String getMicroservice() {
+    return microservice;
+  }
+
+  public String getSchema() {
+    return schema;
+  }
+
+  public String getOperation() {
+    return operation;
+  }
+
+  public long getCurrentTotalRequest() {
+    return currentTotalRequest;
+  }
+
+  public long getCurrentErrorCount() {
+    return currentErrorCount;
+  }
+
+  public long getCurrentErrorPercentage() {
+    return currentErrorPercentage;
+  }
+
+  public int getRequestVolumeThreshold() {
+    return requestVolumeThreshold;
+  }
+
+  public int getSleepWindowInMilliseconds() {
+    return sleepWindowInMilliseconds;
+  }
+
+  public int getErrorThresholdPercentage() {
+    return errorThresholdPercentage;
   }
 }

@@ -60,7 +60,7 @@ cse:
 #    Provider:
 #      policy: returnnull
   credentials:
-    accessKey: EDV0PE1TVESJ0Z9SFMV0
-    secretKey: 82ldOxAc8keg3pbW7pXQbgSRLR5VO4RRBhxhbLKN
+    accessKey: AONYCAOM6ZA0WGN532SE
+    secretKey: CL6FFLnHKona7gvbEzCx7baSDcP3UbePljhg5Pdh
     project: cn-north-1
     akskCustomCipher: default

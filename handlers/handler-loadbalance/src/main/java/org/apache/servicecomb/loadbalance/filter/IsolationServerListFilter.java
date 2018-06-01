@@ -51,6 +51,8 @@ public final class IsolationServerListFilter implements ServerListFilterExt {
 
   private LoadBalancerStats stats;
 
+  public EventManager eventManager = new EventManager();
+
   public void setLoadBalancerStats(LoadBalancerStats stats) {
     this.stats = stats;
   }
@@ -89,24 +91,27 @@ public final class IsolationServerListFilter implements ServerListFilterExt {
     continuousFailureThreshold = Configuration.INSTANCE.getContinuousFailureThreshold(microserviceName);
   }
 
+  @SuppressWarnings("static-access")
   private boolean allowVisit(Server server) {
     updateSettings();
     ServerStats serverStats = stats.getSingleServerStat(server);
     long totalRequest = serverStats.getTotalRequestsCount();
     long failureRequest = serverStats.getSuccessiveConnectionFailureCount();
-    int currentCountinuousFailureCount = ((CseServer) server).getCountinuousFailureCount();
-    double currentErrorThresholdPercentage = (failureRequest / (double) totalRequest) * PERCENT;
+    int currentCountinuousFailureCount = 0;
+    double currentErrorThresholdPercentage = 0;
     if (totalRequest < enableRequestThreshold) {
       return true;
     }
 
     if (continuousFailureThreshold > 0) {
       // continuousFailureThreshold has higher priority to decide the result
+      currentCountinuousFailureCount = ((CseServer) server).getCountinuousFailureCount();
       if (currentCountinuousFailureCount < continuousFailureThreshold) {
         return true;
       }
     } else {
       // if continuousFailureThreshold, then check error percentage
+      currentErrorThresholdPercentage = (failureRequest / (double) totalRequest) * PERCENT;
       if (currentErrorThresholdPercentage < errorThresholdPercentage) {
         return true;
       }
@@ -116,7 +121,7 @@ public final class IsolationServerListFilter implements ServerListFilterExt {
       LOGGER.info("The Service {}'s instance {} has been break, will give a single test opportunity.",
           microserviceName,
           server);
-      EventManager.post(new IsolationServerEvent(microserviceName, totalRequest, currentCountinuousFailureCount,
+      eventManager.post(new IsolationServerEvent(microserviceName, totalRequest, currentCountinuousFailureCount,
           currentErrorThresholdPercentage,
           continuousFailureThreshold, errorThresholdPercentage, enableRequestThreshold,
           singleTestTime, Type.CLOSE));
@@ -124,7 +129,7 @@ public final class IsolationServerListFilter implements ServerListFilterExt {
     }
 
     LOGGER.warn("The Service {}'s instance {} has been break!", microserviceName, server);
-    EventManager.post(new IsolationServerEvent(microserviceName, totalRequest, currentCountinuousFailureCount,
+    eventManager.post(new IsolationServerEvent(microserviceName, totalRequest, currentCountinuousFailureCount,
         currentErrorThresholdPercentage,
         continuousFailureThreshold, errorThresholdPercentage, enableRequestThreshold,
         singleTestTime, Type.OPEN));
