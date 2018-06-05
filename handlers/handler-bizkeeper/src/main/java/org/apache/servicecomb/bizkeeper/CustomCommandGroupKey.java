@@ -1,4 +1,4 @@
-package org.apache.servicecomb.bizkeeper.event;
+package org.apache.servicecomb.bizkeeper;
 
 import org.apache.servicecomb.core.Invocation;
 

@@ -17,7 +17,6 @@
 
 package org.apache.servicecomb.bizkeeper;
 
-import org.apache.servicecomb.bizkeeper.event.CustomCommandGroupKey;
 import org.apache.servicecomb.core.Invocation;
 
 import com.netflix.hystrix.HystrixCommandGroupKey;
