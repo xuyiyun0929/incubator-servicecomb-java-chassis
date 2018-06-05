@@ -17,7 +17,7 @@
 
 package org.apache.servicecomb.bizkeeper;
 
-import org.apache.servicecomb.bizkeeper.event.test;
+import org.apache.servicecomb.bizkeeper.event.CustomCommandGroupKey;
 import org.apache.servicecomb.core.Invocation;
 
 import com.netflix.hystrix.HystrixCommandGroupKey;
@@ -32,8 +32,7 @@ public final class CommandKey {
   }
 
   public static HystrixCommandGroupKey toHystrixCommandGroupKey(String type, Invocation invocation) {
-
-    return test.asKey(type, invocation.getMicroserviceName());
+    return CustomCommandGroupKey.asKey(invocation);
   }
 
   public static HystrixCommandKey toHystrixCommandKey(String type, Invocation invocation) {

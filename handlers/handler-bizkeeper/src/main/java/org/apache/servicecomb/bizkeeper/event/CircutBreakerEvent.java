@@ -18,7 +18,6 @@ package org.apache.servicecomb.bizkeeper.event;
 
 import org.apache.servicecomb.foundation.common.event.AlarmEvent;
 
-import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandKey;
 import com.netflix.hystrix.HystrixCommandMetrics;
 
@@ -51,7 +50,7 @@ public class CircutBreakerEvent extends AlarmEvent {
     super(type);
     HystrixCommandMetrics hystrixCommandMetrics =
         HystrixCommandMetrics.getInstance(commandKey);
-    test a = (test)hystrixCommandMetrics.getCommandGroup();
+    CustomCommandGroupKey a = (CustomCommandGroupKey) hystrixCommandMetrics.getCommandGroup();
     this.microservice = a.getM();
     String[] arrayKey = commandKey.name().split("\\.");
     this.role = arrayKey[0];
